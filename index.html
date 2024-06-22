@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spot the Differences</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        main {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .images {
+            display: flex;
+            justify-content: space-around;
+            position: relative;
+        }
+        .images img {
+            width: 45%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .images img:hover {
+            transform: scale(1.05);
+        }
+        .spot {
+            position: absolute;
+            border: 2px solid transparent;
+            background-color: rgba(0, 0, 0, 0);
+            border-radius: 50%;
+            transition: background-color 0.3s, border 0.3s;
+        }
+        .spot.highlighted {
+            border: 2px solid red;
+            background-color: rgba(255, 0, 0, 0.5);
+        }
+        .spot[data-correct="true"]:hover {
+            cursor: default;
+        }
+        nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #00796b;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #004d40;
+        }
+    </style>
+</head>
+<body>
+<!-- Student Name: Richard Gologabin -->
+<header>
+    <h1>Spot the Differences</h1>
+</header>
+<main>
+    <p>Find the differences between the two images below:</p>
+    <div class="images" id="image-container">
+        <img src="image1.jpg" alt="Image 1">
+        <img src="image2.jpg" alt="Image 2">
+        <!-- Hidden spots for the differences -->
+        <div class="spot" style="top: 2%; left: 3%; width: 5%; height: 8%;" data-correct="true"></div>
+        <div class="spot" style="top: 15%; left: 43%; width: 5%; height: 15%;" data-correct="true"></div>
+        <div class="spot" style="top: 65%; left: 17%; width: 10%; height: 20%;" data-correct="true"></div>
+    </div>
+    <nav>
+        <a href="hints.html">Hints</a>
+        <a href="benefits.html">Benefits</a>
+    </nav>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const spots = document.querySelectorAll('.spot');
+        let correctClicks = 0;
+        let incorrectClicks = 0;
+
+        spots.forEach(spot => {
+            spot.addEventListener('click', (event) => {
+                const isCorrect = event.target.getAttribute('data-correct') === 'true';
+                if (isCorrect && !event.target.classList.contains('highlighted')) {
+                    event.target.classList.add('highlighted');
+                    correctClicks++;
+                } else if (!isCorrect) {
+                    incorrectClicks++;
+                }
+                checkCompletion();
+            });
+        });
+
+        function checkCompletion() {
+            if (correctClicks === 3) {
+                window.location.href = 'congratulations.html';
+            }
+            if (incorrectClicks > 1) {
+                window.location.href = 'tryagain.html';
+            }
+        }
+
+        document.getElementById('image-container').addEventListener('click', (event) => {
+            if (!event.target.classList.contains('spot')) {
+                incorrectClicks++;
+                if (incorrectClicks > 1) {
+                    window.location.href = 'tryagain.html';
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
